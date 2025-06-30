@@ -1,8 +1,4 @@
-import { Bot } from "grammy";
-import { getAiAnswer } from "./ai";
-
-export type Mode = 'long' | 'short'
-let mode: Mode = 'long'
+import { Bot, InlineKeyboard } from "grammy";
 
 const token = process.env.BOT_TOKEN;
 
@@ -12,30 +8,31 @@ if (!token) {
 
 const bot = new Bot(token);
 
-bot.command("mode", (ctx) => {
-  mode = mode === 'long' ? 'short' : 'long';
-  ctx.reply(`Mode set to ${mode}. I am answering ${mode === 'long' ? 'in detail and comprehensively' : 'briefly and concisely'}`);
-});
+// const inlineKeyboard = new InlineKeyboard().webApp(
+//   "Наш канал",
+//   "https://t.me/itsnetizen",
+// );
 
+const inlineKeyboard2 = new InlineKeyboard().webApp(
+  "Открыть приложение",
+  "https://netizenworld.ru",
+);
 
-bot.command('start', (ctx) => {
-  return ctx.reply(
-    '👋 Hello! I am your AI assistant.\n\n' +
-      'Just write me something, and I will try to help as clearly and usefully as possible.\n\n' +
-      'Available commands:\n' +
-      '/mode — switch response style (short or detailed)\n' +
-      '/help — show this message again'
-  );
-});
+bot.command("start", async (ctx) => {
+  await ctx.replyWithPhoto("https://champtracker-backend.vercel.app/images/net.jpeg", {
+    caption: `*Добро пожаловать в НЭТИЗЕН WORLD!*
 
-bot.command('help', (ctx) => {
-  return ctx.reply(
-    '👋 Hello! I am your AI assistant.\n\n' +
-      'Just write me something, and I will try to help as clearly and usefully as possible.\n\n' +
-      'Available commands:\n' +
-      '/mode — switch response style (short or detailed)\n' +
-      '/help — show this message again'
-  );
+ • Проходи тесты 🔨
+ • Зарабатывай монеты 💎 
+ • Трать их [ВСТАВИТЬ НА ЧТО ТРАТИТЬ] ⚠️
+
+ Да, мы пока не знаем на что можно тратить монеты, но обязательно придумаем и реализуем (но это тяжело хех)
+
+🏃‍♂️Если у тебя есть канал в ТГ или же ты просто хочешь сделать квиз и пошарить его на нэтизенов — пиши нам🏃‍♂️`,
+    // reply_markup: inlineKeyboard.row().add(inlineKeyboard.inline_keyboard[0][0]),
+    reply_markup: InlineKeyboard.from(inlineKeyboard2),
+    parse_mode: "Markdown",
+  });
 });
 
 bot.on("message", async (ctx) => {
@@ -47,8 +44,7 @@ bot.on("message", async (ctx) => {
 
   await ctx.api.sendChatAction(ctx.chat.id, 'typing');
 
-  const answer = await getAiAnswer(userMessage, mode);
-  ctx.reply(answer);
+;
 });
 
 bot.start();
