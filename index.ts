@@ -8,15 +8,10 @@ if (!token) {
 
 const bot = new Bot(token);
 
-const inlineKeyboard = new InlineKeyboard().url(
-  "Наш канал",
-  "https://t.me/itsnetizen",
-);
-
-const inlineKeyboard2 = new InlineKeyboard().webApp(
-  "Открыть приложение",
-  "https://netizenworld.ru",
-);
+const inlineKeyboard = new InlineKeyboard()
+  .url("Наш канал", "https://t.me/itsnetizen")
+  .row()
+  .webApp("Открыть приложение", "https://netizenworld.ru");
 
 bot.command("start", async (ctx) => {
   await ctx.replyWithPhoto("https://champtracker-backend.vercel.app/images/net.jpeg", {
@@ -29,8 +24,7 @@ bot.command("start", async (ctx) => {
  Да, мы пока не знаем на что можно тратить монеты, но обязательно придумаем и реализуем (но это тяжело хех)
 
 🏃‍♂️Если у тебя есть канал в ТГ или же ты просто хочешь сделать квиз и пошарить его на нэтизенов — пиши нам🏃‍♂️`,
-    reply_markup: inlineKeyboard.row().add(inlineKeyboard.inline_keyboard[0][0]),
-    // reply_markup: InlineKeyboard.from(inlineKeyboard2),
+    reply_markup: inlineKeyboard,
     parse_mode: "Markdown",
   });
 });
